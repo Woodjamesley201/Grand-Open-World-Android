@@ -144,7 +144,7 @@ def gen_texture(name, seed):
     if name == "field":
         row = 0.5 + 0.5 * np.sin(xx / (size / 32.0))
         v = n * 0.6
-        return _to_image(np.dstack([0.35 + v * 0.1, 0.45 + v * 0.15 + row * 0.08, 0.18]))
+        return _to_image(np.dstack([0.35 + v * 0.1, 0.45 + v * 0.15 + row * 0.08, np.full(v.shape, 0.18)]))
     if name == "water":
         v = _noise(seed + 500, size, 1.0 / 16.0)
         v2 = _noise(seed + 600, size, 1.0 / 64.0)
