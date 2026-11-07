@@ -463,9 +463,8 @@ func _build_dialog_ui() -> void:
 	# this node is in the world tree; add the canvas layer to the scene root
 	get_tree().current_scene.add_child.call_deferred(layer)
 	var bg := Panel.new()
-	bg.set_anchors_preset(Control.PRESET_BOTTOM_WIDE)
-	bg.position = Vector2(0, -190)
 	bg.custom_minimum_size = Vector2(0, 190)
+	UiLayout.bottom_row(bg, 190)
 	var style := StyleBoxFlat.new()
 	style.bg_color = Color(0.02, 0.03, 0.06, 0.92)
 	style.set_corner_radius_all(0)
@@ -473,12 +472,12 @@ func _build_dialog_ui() -> void:
 	_dialog_root.add_child(bg)
 	_dialog_name = Label.new()
 	_dialog_name.add_theme_font_size_override("font_size", 26)
-	_dialog_name.position = Vector2(40, -180)
+	_dialog_name.position = Vector2(40, 12)
 	_dialog_name.modulate = Color(1.0, 0.8, 0.3)
 	bg.add_child(_dialog_name)
 	_dialog_text = Label.new()
 	_dialog_text.add_theme_font_size_override("font_size", 24)
-	_dialog_text.position = Vector2(40, -140)
+	_dialog_text.position = Vector2(40, 50)
 	_dialog_text.custom_minimum_size = Vector2(900, 80)
 	_dialog_text.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	bg.add_child(_dialog_text)
@@ -486,7 +485,7 @@ func _build_dialog_ui() -> void:
 	hint.text = "TAP TO CONTINUE"
 	hint.add_theme_font_size_override("font_size", 18)
 	hint.modulate = Color(0.6, 0.6, 0.7)
-	hint.position = Vector2(40, -60)
+	hint.position = Vector2(40, 150)
 	bg.add_child(hint)
 	var btn := Button.new()
 	btn.text = ""

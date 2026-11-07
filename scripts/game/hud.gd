@@ -77,40 +77,35 @@ func _build_status(root: Control) -> void:
 	armor_bar = _bar(root, Color(0.3, 0.6, 0.95), Vector2(14, 254), 210.0)
 	# money top-right
 	money_label = _label(root, "$0", 30, Color(0.5, 0.95, 0.5))
-	money_label.set_anchors_preset(Control.PRESET_TOP_RIGHT)
-	money_label.position = Vector2(-260, 16)
+	money_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	UiLayout.place(money_label, 1.0, 0.0, Vector2(-270, 16), Vector2(250, 44))
 	# wanted stars
 	wanted_label = _label(root, "", 34, Color(1.0, 0.85, 0.2))
-	wanted_label.set_anchors_preset(Control.PRESET_TOP_RIGHT)
-	wanted_label.position = Vector2(-260, 56)
+	wanted_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	UiLayout.place(wanted_label, 1.0, 0.0, Vector2(-270, 60), Vector2(250, 46))
 	# objective
 	objective_label = _label(root, "", 22, Color(1, 1, 1))
-	objective_label.set_anchors_preset(Control.PRESET_TOP_RIGHT)
-	objective_label.position = Vector2(-520, 100)
 	objective_label.custom_minimum_size = Vector2(500, 60)
+	UiLayout.place(objective_label, 1.0, 0.0, Vector2(-520, 106), Vector2(500, 60))
 	objective_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	objective_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	# speed (vehicle)
 	speed_label = _label(root, "", 30, Color(1, 1, 1))
-	speed_label.set_anchors_preset(Control.PRESET_BOTTOM_RIGHT)
-	speed_label.position = Vector2(-260, -160)
+	UiLayout.place(speed_label, 1.0, 1.0, Vector2(-260, -175), Vector2(240, 44))
 	speed_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	# ammo
 	ammo_label = _label(root, "", 24, Color(1.0, 0.9, 0.5))
-	ammo_label.set_anchors_preset(Control.PRESET_BOTTOM_RIGHT)
-	ammo_label.position = Vector2(-260, -120)
+	UiLayout.place(ammo_label, 1.0, 1.0, Vector2(-260, -128), Vector2(240, 38))
 	ammo_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	# interaction prompt (center bottom)
 	prompt_label = _label(root, "", 26, Color(1.0, 0.9, 0.4))
-	prompt_label.set_anchors_preset(Control.PRESET_CENTER_BOTTOM)
-	prompt_label.position = Vector2(-300, -190)
 	prompt_label.custom_minimum_size = Vector2(600, 40)
+	UiLayout.place(prompt_label, 0.5, 1.0, Vector2(-300, -245), Vector2(600, 40))
 	prompt_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	# notifications (center top)
 	notif_label = _label(root, "", 26, Color(1, 1, 1))
-	notif_label.set_anchors_preset(Control.PRESET_CENTER_TOP)
-	notif_label.position = Vector2(-400, 130)
 	notif_label.custom_minimum_size = Vector2(800, 40)
+	UiLayout.place(notif_label, 0.5, 0.0, Vector2(-400, 130), Vector2(800, 40))
 	notif_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	notif_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	# fps
@@ -123,8 +118,7 @@ func _build_status(root: Control) -> void:
 	pause_btn.text = "II"
 	pause_btn.add_theme_font_size_override("font_size", 26)
 	pause_btn.custom_minimum_size = Vector2(64, 56)
-	pause_btn.set_anchors_preset(Control.PRESET_TOP_RIGHT)
-	pause_btn.position = Vector2(-80, 12)
+	UiLayout.place(pause_btn, 1.0, 0.0, Vector2(-84, 12), Vector2(72, 60))
 	pause_btn.pressed.connect(func():
 		if main != null and main.has_method("open_pause_menu"):
 			main.call("open_pause_menu"))

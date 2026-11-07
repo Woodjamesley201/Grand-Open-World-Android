@@ -1,7 +1,7 @@
 ## MainMenu - title screen shown before the game opens.
 ## The player must download the HD asset packs (~1 GB) before playing.
 class_name MainMenu
-extends Control
+extends CanvasLayer
 
 signal start_requested(new_game: bool)
 
@@ -21,8 +21,7 @@ func _ready() -> void:
 	asset_manager.name = "AssetManager"
 	add_child(asset_manager)
 
-	set_anchors_preset(Control.PRESET_FULL_RECT)
-	mouse_filter = Control.MOUSE_FILTER_STOP
+	layer = 50
 
 	_build_menu()
 	_build_download_screen()
@@ -58,8 +57,7 @@ func _build_menu() -> void:
 	var title := Label.new()
 	title.text = "GRAND OPEN WORLD"
 	title.add_theme_font_size_override("font_size", 72)
-	title.set_anchors_preset(Control.PRESET_CENTER_TOP)
-	title.position = Vector2(0, 90)
+	UiLayout.row(title, 90, 90)
 	title.custom_minimum_size = Vector2(0, 90)
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_menu_root.add_child(title)
@@ -68,17 +66,17 @@ func _build_menu() -> void:
 	subtitle.text = "OCEANPORT CRIME CITY"
 	subtitle.add_theme_font_size_override("font_size", 26)
 	subtitle.modulate = Color(1.0, 0.75, 0.3)
-	subtitle.set_anchors_preset(Control.PRESET_CENTER_TOP)
-	subtitle.position = Vector2(0, 175)
+	UiLayout.row(subtitle, 178, 40)
 	subtitle.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_menu_root.add_child(subtitle)
 
+	var center := CenterContainer.new()
+	center.set_anchors_preset(Control.PRESET_FULL_RECT)
+	_menu_root.add_child(center)
 	var vbox := VBoxContainer.new()
-	vbox.set_anchors_preset(Control.PRESET_CENTER)
-	vbox.position = Vector2(-160, -90)
 	vbox.custom_minimum_size = Vector2(320, 0)
 	vbox.add_theme_constant_override("separation", 14)
-	_menu_root.add_child(vbox)
+	center.add_child(vbox)
 
 	_buttons.clear()
 	var cont := _menu_button(vbox, "CONTINUE")
@@ -102,8 +100,7 @@ func _build_menu() -> void:
 
 	_play_note = Label.new()
 	_play_note.add_theme_font_size_override("font_size", 18)
-	_play_note.set_anchors_preset(Control.PRESET_CENTER_BOTTOM)
-	_play_note.position = Vector2(0, -70)
+	UiLayout.bottom_row(_play_note, 30, 70)
 	_play_note.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_play_note.custom_minimum_size = Vector2(0, 30)
 	_menu_root.add_child(_play_note)
@@ -146,31 +143,27 @@ func _build_download_screen() -> void:
 	var title := Label.new()
 	title.text = "DOWNLOAD GAME ASSETS"
 	title.add_theme_font_size_override("font_size", 46)
-	title.set_anchors_preset(Control.PRESET_CENTER_TOP)
-	title.position = Vector2(0, 110)
+	UiLayout.row(title, 110, 50)
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_download_root.add_child(title)
 
 	_dl_status = Label.new()
 	_dl_status.text = "Checking for updates..."
 	_dl_status.add_theme_font_size_override("font_size", 22)
-	_dl_status.set_anchors_preset(Control.PRESET_CENTER)
-	_dl_status.position = Vector2(-350, -60)
+	UiLayout.place(_dl_status, 0.5, 0.5, Vector2(-350, -100), Vector2(700, 60))
 	_dl_status.custom_minimum_size = Vector2(700, 60)
 	_dl_status.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_dl_status.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	_download_root.add_child(_dl_status)
 
 	_dl_progress = ProgressBar.new()
-	_dl_progress.set_anchors_preset(Control.PRESET_CENTER)
-	_dl_progress.position = Vector2(-300, 20)
+	UiLayout.place(_dl_progress, 0.5, 0.5, Vector2(-300, -10), Vector2(600, 34))
 	_dl_progress.custom_minimum_size = Vector2(600, 34)
 	_dl_progress.show_percentage = true
 	_download_root.add_child(_dl_progress)
 
 	var back := _menu_button(_download_root, "BACK")
-	back.set_anchors_preset(Control.PRESET_CENTER_BOTTOM)
-	back.position = Vector2(-160, -150)
+	UiLayout.place(back, 0.5, 1.0, Vector2(-160, -240), Vector2(320, 62))
 	back.pressed.connect(func():
 		_download_root.visible = false
 		_menu_root.visible = true
@@ -240,17 +233,17 @@ func _build_settings_screen() -> void:
 	var title := Label.new()
 	title.text = "SETTINGS"
 	title.add_theme_font_size_override("font_size", 46)
-	title.set_anchors_preset(Control.PRESET_CENTER_TOP)
-	title.position = Vector2(0, 110)
+	UiLayout.row(title, 110, 50)
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_settings_root.add_child(title)
 
+	var center := CenterContainer.new()
+	center.set_anchors_preset(Control.PRESET_FULL_RECT)
+	_settings_root.add_child(center)
 	var vbox := VBoxContainer.new()
-	vbox.set_anchors_preset(Control.PRESET_CENTER)
-	vbox.position = Vector2(-260, -140)
 	vbox.custom_minimum_size = Vector2(520, 0)
 	vbox.add_theme_constant_override("separation", 18)
-	_settings_root.add_child(vbox)
+	center.add_child(vbox)
 
 	var quality_row := HBoxContainer.new()
 	vbox.add_child(quality_row)
@@ -329,8 +322,7 @@ func _build_settings_screen() -> void:
 	vol_row.add_child(vol)
 
 	var back := _menu_button(_settings_root, "BACK")
-	back.set_anchors_preset(Control.PRESET_CENTER_BOTTOM)
-	back.position = Vector2(-160, -120)
+	UiLayout.place(back, 0.5, 1.0, Vector2(-160, -240), Vector2(320, 62))
 	back.pressed.connect(func():
 		_settings_root.visible = false
 		_menu_root.visible = true)
@@ -352,23 +344,20 @@ func _build_credits_screen() -> void:
 	var title := Label.new()
 	title.text = "CREDITS"
 	title.add_theme_font_size_override("font_size", 46)
-	title.set_anchors_preset(Control.PRESET_CENTER_TOP)
-	title.position = Vector2(0, 110)
+	UiLayout.row(title, 110, 50)
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_credits_root.add_child(title)
 
 	var body := Label.new()
 	body.text = "GRAND OPEN WORLD\n\nAn original open-world crime sandbox\nset in the fictional city of Oceanport.\n\nEngine: Godot 4 (mobile renderer)\nAll code, models, textures and audio are\nprocedurally generated originals.\n\nNo GTA assets were used.\n\nLicense: MIT"
 	body.add_theme_font_size_override("font_size", 24)
-	body.set_anchors_preset(Control.PRESET_CENTER)
-	body.position = Vector2(-350, -150)
 	body.custom_minimum_size = Vector2(700, 400)
+	UiLayout.place(body, 0.5, 0.5, Vector2(-350, -210), Vector2(700, 400))
 	body.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_credits_root.add_child(body)
 
 	var back := _menu_button(_credits_root, "BACK")
-	back.set_anchors_preset(Control.PRESET_CENTER_BOTTOM)
-	back.position = Vector2(-160, -120)
+	UiLayout.place(back, 0.5, 1.0, Vector2(-160, -240), Vector2(320, 62))
 	back.pressed.connect(func():
 		_credits_root.visible = false
 		_menu_root.visible = true)

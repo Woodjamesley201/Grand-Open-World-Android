@@ -26,9 +26,8 @@ func setup(m: Node) -> void:
 	root.add_child(_look)
 	# joystick bottom-left
 	_joystick = Joystick.new()
-	_joystick.position = Vector2(30, -330)
-	_joystick.set_anchors_preset(Control.PRESET_BOTTOM_LEFT)
 	_joystick.size = Vector2(280, 280)
+	UiLayout.place(_joystick, 0.0, 1.0, Vector2(30, -310), Vector2(280, 280))
 	_joystick.mouse_filter = Control.MOUSE_FILTER_STOP
 	root.add_child(_joystick)
 	# button groups
@@ -63,9 +62,8 @@ func _add_btn(parent: Control, action: String, text: String, pos: Vector2, radiu
 	b.action = action
 	b.label_text = text
 	b.radius = radius
-	b.set_anchors_preset(Control.PRESET_BOTTOM_RIGHT)
-	b.position = pos
 	b.size = Vector2(radius * 2.0 + 20.0, radius * 2.0 + 20.0)
+	UiLayout.place(b, 1.0, 1.0, pos)
 	parent.add_child(b)
 	_buttons[action] = b
 

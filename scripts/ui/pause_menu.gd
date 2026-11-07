@@ -21,17 +21,17 @@ func _ready() -> void:
 	var title := Label.new()
 	title.text = "PAUSED"
 	title.add_theme_font_size_override("font_size", 52)
-	title.set_anchors_preset(Control.PRESET_CENTER_TOP)
-	title.position = Vector2(0, 100)
+	UiLayout.row(title, 100, 70)
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	root.add_child(title)
 
+	var center := CenterContainer.new()
+	center.set_anchors_preset(Control.PRESET_FULL_RECT)
+	root.add_child(center)
 	var vbox := VBoxContainer.new()
-	vbox.set_anchors_preset(Control.PRESET_CENTER)
-	vbox.position = Vector2(-200, -160)
 	vbox.custom_minimum_size = Vector2(400, 0)
 	vbox.add_theme_constant_override("separation", 14)
-	root.add_child(vbox)
+	center.add_child(vbox)
 
 	var resume := _btn(vbox, "RESUME")
 	resume.pressed.connect(func(): closed.emit("resume"))
@@ -57,7 +57,7 @@ var _settings_panel: VBoxContainer
 func _build_settings(root: Control) -> void:
 	_settings_panel = VBoxContainer.new()
 	_settings_panel.visible = false
-	_settings_panel.position = Vector2(700, 220)
+	UiLayout.place(_settings_panel, 0.5, 0.0, Vector2(40, 200), Vector2(420, 380))
 	_settings_panel.custom_minimum_size = Vector2(420, 300)
 	_settings_panel.add_theme_constant_override("separation", 18)
 	root.add_child(_settings_panel)

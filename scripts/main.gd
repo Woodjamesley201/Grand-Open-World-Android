@@ -30,6 +30,40 @@ func _ready() -> void:
 		smoke_test = true
 		start_game(true)
 		return
+	if args.has("layouttest"):
+		# UI layout verification: render at the Tab A9 8.7" resolution and
+		# dump every Control's rect so off-screen/empty elements are caught.
+		get_window().size = Vector2i(1340, 800)
+		await get_tree().process_frame
+		show_menu()
+		await get_tree().process_frame
+		await get_tree().process_frame
+		print("=== LAYOUT DUMP: MENU ===")
+		_dump_ui_layout()
+		for screen_name in ["_download_root", "_settings_root", "_credits_root"]:
+			if screen_name == "_download_root":
+				menu._menu_root.visible = false
+				menu._download_root.visible = true
+			elif screen_name == "_settings_root":
+				menu._menu_root.visible = false
+				menu._settings_root.visible = true
+			else:
+				menu._menu_root.visible = false
+				menu._credits_root.visible = true
+			await get_tree().process_frame
+			print("=== LAYOUT DUMP: ", screen_name, " ===")
+			_dump_ui_layout()
+			menu._download_root.visible = false
+			menu._settings_root.visible = false
+			menu._credits_root.visible = false
+		menu._menu_root.visible = true
+		start_game(true)
+		for i in range(6):
+			await get_tree().process_frame
+		print("=== LAYOUT DUMP: GAME ===")
+		_dump_ui_layout()
+		get_tree().quit()
+		return
 	if args.has("autostart"):
 		start_game(true)
 		return
@@ -173,6 +207,24 @@ func _on_pause_closed(action: String) -> void:
 	if action == "quit":
 		_save_and_quit()
 
+func _dump_ui_layout() -> void:
+	var vs: Vector2 = get_viewport().get_visible_rect().size
+	print("LAYOUT viewport ", vs.x, "x", vs.y)
+	_dump_controls(get_tree().root, vs)
+
+func _dump_controls(node: Node, vs: Vector2) -> void:
+	for c in node.get_children():
+		if c is Control:
+			var r: Rect2 = (c as Control).get_global_rect()
+			var bad := ""
+			if r.position.x < -1.0 or r.position.y < -1.0 or r.end.x > vs.x + 1.0 or r.end.y > vs.y + 1.0:
+				bad = "  <<< OFFSCREEN"
+			if r.size.x <= 1.0 or r.size.y <= 1.0:
+				bad += "  <<< EMPTY"
+			if bad != "":
+				print("LAYOUT ", str(c.get_path()), " rect=", r, bad)
+		_dump_controls(c, vs)
+
 func _save_and_quit() -> void:
 	if player != null:
 		var veh_id := ""
@@ -193,15 +245,14 @@ func _show_loading_screen() -> void:
 	var title := Label.new()
 	title.text = "GRAND OPEN WORLD"
 	title.add_theme_font_size_override("font_size", 54)
-	title.set_anchors_preset(Control.PRESET_CENTER_TOP)
-	title.position.y = 80.0
+	UiLayout.row(title, 80, 70)
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	layer.add_child(title)
 	_loading_label = Label.new()
 	_loading_label.text = "Loading Oceanport..."
 	_loading_label.add_theme_font_size_override("font_size", 26)
-	_loading_label.set_anchors_preset(Control.PRESET_CENTER)
-	_loading_label.position.y = 0.0
+	_loading_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	UiLayout.place(_loading_label, 0.5, 0.5, Vector2(-250, -20), Vector2(500, 40))
 	layer.add_child(_loading_label)
 	add_child(layer)
 
