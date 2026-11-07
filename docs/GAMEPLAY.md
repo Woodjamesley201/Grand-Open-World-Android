@@ -29,6 +29,8 @@ Space jump, Shift sprint, F enter/exit, E interact, left-click fire, Esc pause.
 
 ## Systems
 
+- **UI scale** (Settings): the interface auto-fits your screen; pick
+  75%-150% manually if you want buttons and text bigger or smaller.
 - **Day/night** (8 min cycle) and **weather** change on their own; storms bring
   lightning. Headlights and street lights come on at night.
 - **Swimming**: the river east of downtown and the ocean are swimmable — drive or

@@ -25,6 +25,7 @@ var settings: Dictionary = {
 	"volume_music": 0.7,
 	"invert_look_x": false,
 	"show_fps": false,
+	"ui_scale": "auto",        # "auto" or a float multiplier (0.75 / 1.0 / 1.25 / 1.5)
 }
 
 var weapons: Dictionary = {
@@ -53,6 +54,40 @@ func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	_check_assets()
 	load_settings()
+	apply_ui_scale()
+	# re-fit when the window rotates or resizes
+	get_window().size_changed.connect(func():
+		if String(settings.get("ui_scale", "auto")) == "auto":
+			apply_ui_scale())
+
+## UI scaling. The canvas_items stretch mode already normalises the UI to any
+## screen; content_scale_factor multiplies on top of it. "auto" fits the UI to
+## the device (slightly smaller on big low-density tablets), manual values let
+## the player force a size.
+func apply_ui_scale() -> void:
+	var win := get_window()
+	if win == null:
+		return
+	var mode := String(settings.get("ui_scale", "auto"))
+	var factor := 1.0
+	if mode == "auto":
+		factor = _auto_ui_factor(win)
+	else:
+		factor = clampf(float(mode), 0.6, 1.6)
+	win.content_scale_factor = factor
+
+func _auto_ui_factor(win: Window) -> float:
+	# Base design is 1280x720 virtual pixels. With stretch "expand" the UI
+	# already scales to the window, so 1.0 suits phones. Large low-DPI
+	# screens (typically tablets) get a modest reduction so buttons and
+	# text don't dominate the screen.
+	var dpi := 96.0
+	if DisplayServer.get_screen_count() > 0:
+		dpi = float(DisplayServer.screen_get_dpi())
+	var short_side := minf(win.size.x, win.size.y)
+	if dpi > 0.0 and dpi < 170.0 and short_side >= 900.0:
+		return 0.85
+	return 1.0
 
 func _check_assets() -> void:
 	if FileAccess.file_exists(ASSET_VERSION_FILE):

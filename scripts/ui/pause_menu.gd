@@ -80,6 +80,29 @@ func _build_settings(root: Control) -> void:
 		_apply_quality())
 	qrow.add_child(_quality_opts)
 
+	var urow := HBoxContainer.new()
+	_settings_panel.add_child(urow)
+	var ul := Label.new()
+	ul.text = "UI scale"
+	ul.add_theme_font_size_override("font_size", 22)
+	ul.custom_minimum_size = Vector2(230, 36)
+	urow.add_child(ul)
+	var u_opts := OptionButton.new()
+	u_opts.add_theme_font_size_override("font_size", 20)
+	for s in ["auto", "0.75", "1.0", "1.25", "1.5"]:
+		u_opts.add_item(s)
+	u_opts.selected = ["auto", "0.75", "1.0", "1.25", "1.5"].find(String(GameState.settings.get("ui_scale", "auto")))
+	u_opts.item_selected.connect(func(idx: int):
+		var vals: Array = ["auto", "0.75", "1.0", "1.25", "1.5"]
+		var v: String = vals[idx]
+		if v == "auto":
+			GameState.settings["ui_scale"] = "auto"
+		else:
+			GameState.settings["ui_scale"] = float(v)
+		GameState.save_settings()
+		GameState.apply_ui_scale())
+	urow.add_child(u_opts)
+
 	var srow := HBoxContainer.new()
 	_settings_panel.add_child(srow)
 	var sl := Label.new()
