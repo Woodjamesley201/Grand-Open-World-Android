@@ -58,7 +58,7 @@ func _check_assets() -> void:
 	if FileAccess.file_exists(ASSET_VERSION_FILE):
 		var f := FileAccess.open(ASSET_VERSION_FILE, FileAccess.READ)
 		if f:
-			var data := JSON.parse_string(f.get_as_text())
+			var data: Variant = JSON.parse_string(f.get_as_text())
 			f.close()
 			if data is Dictionary and String(data.get("version", "")) != "":
 				asset_version = String(data.get("version", ""))

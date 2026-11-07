@@ -341,7 +341,7 @@ func _synth_music(sr: int, seed: int, root_chord: Array, bpm: float, seconds: fl
 			_add_tone(out, start, int(sr * beat * 0.9), midi_to_hz.call(float(chord[0]) - 12.0), 0.16, sr, 2.0)
 		# melody
 		if rng.randf() < 0.6:
-			var note := penta[rng.randi() % penta.size()]
+			var note: int = penta[rng.randi() % penta.size()]
 			_add_tone(out, start, int(sr * beat * 0.8), midi_to_hz.call(float(note)), 0.1, sr, 4.0)
 		# hat
 		_add_noise_tick(out, start, int(sr * 0.03), 0.05, rng)

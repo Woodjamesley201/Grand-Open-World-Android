@@ -685,7 +685,6 @@ func _build_services() -> void:
 		for px in [-3, 3]:
 			_add_box(gc + Vector3(px, 1.0, 0), Vector3(1.2, 2.0, 0.8), materials["brick"], 2)
 		var shop := _add_box(gc + Vector3(0, 2.0, -10.0), Vector3(12.0, 4.0, 8.0), materials["plaster"], 2)
-		_ = shop
 		var gl := Label3D.new()
 		gl.text = "GAS & REPAIR"
 		gl.font_size = 30
@@ -744,7 +743,7 @@ func _build_river_bridge() -> void:
 	var deck := MeshInstance3D.new()
 	var dm := PlaneMesh.new()
 	dm.size = Vector2(110, ROAD_W)
-	var bm := materials["road"]
+	var bm: StandardMaterial3D = materials["road_h"]
 	dm.material = bm
 	deck.mesh = dm
 	deck.rotation.x = -PI / 2.0
@@ -796,7 +795,7 @@ func _build_airport() -> void:
 	var runway := MeshInstance3D.new()
 	var rm := PlaneMesh.new()
 	rm.size = Vector2(400, 36)
-	var rmat := materials["runway"]
+	var rmat: StandardMaterial3D = materials["runway"]
 	rm.material = rmat
 	runway.mesh = rm
 	runway.rotation.x = -PI / 2.0
@@ -1111,7 +1110,7 @@ func _flush_building_batches() -> void:
 # ---------------------------------------------------------------- helpers
 
 func apply_quality(quality: String) -> void:
-	var fog_far := {"low": 350.0, "medium": 700.0, "high": 1200.0}[quality]
+	var fog_far: float = {"low": 350.0, "medium": 700.0, "high": 1200.0}[quality]
 	if day_night != null:
 		day_night.set_fog_distance(fog_far)
 		day_night.set_shadows(quality != "low")

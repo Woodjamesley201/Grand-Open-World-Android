@@ -33,14 +33,8 @@ func setup(b: WorldBuilder, dn: DayNight) -> void:
 	_rain.gravity = Vector3(0, -6, 0)
 	_rain.emission_shape = CPUParticles3D.EMISSION_SHAPE_BOX
 	_rain.emission_box_extents = Vector3(28, 8, 28)
-	var drop := QuadMesh.new()
-	drop.size = Vector2(0.03, 0.35)
-	var dm := StandardMaterial3D.new()
-	dm.albedo_color = Color(0.65, 0.75, 0.95, 0.5)
-	dm.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
-	dm.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
-	drop.material = dm
-	_rain.particle = drop
+	_rain.scale_amount_min = 0.04
+	_rain.scale_amount_max = 0.08
 	add_child(_rain)
 	_lightning_light = OmniLight3D.new()
 	_lightning_light.light_energy = 0.0

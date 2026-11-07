@@ -610,12 +610,12 @@ func _open_weapons() -> void:
 			w["ammo"] = int(w["ammo"]) + 60
 			GameState.weapons["smg"] = w
 			GameState.equipped_weapon = "smg"
-			GameState.notify("SMG purchased")))
+			GameState.notify("SMG purchased"))
 	_shop_item("Pistol ammo x30 - $60", func():
 		if GameState.spend(60):
 			var w: Dictionary = GameState.weapons["pistol"]
 			w["ammo"] = int(w["ammo"]) + 30
-			GameState.weapons["pistol"] = w))
+			GameState.weapons["pistol"] = w)
 	_shop_item("Body armor - $250", func():
 		if GameState.spend(250):
 			GameState.armor = 100.0
@@ -629,11 +629,11 @@ func _open_clothes() -> void:
 	_shop_item("New shirt color - $50", func():
 		if GameState.spend(50):
 			GameState.customization["shirt"] = Color.from_hsv(randf(), 0.7, 0.9)
-			player.apply_customization()))
+			player.apply_customization())
 	_shop_item("New pants color - $50", func():
 		if GameState.spend(50):
 			GameState.customization["pants"] = Color.from_hsv(randf(), 0.5, 0.5)
-			player.apply_customization()))
+			player.apply_customization())
 
 func _open_garage() -> void:
 	_clear_shop_items()

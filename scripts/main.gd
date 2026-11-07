@@ -22,7 +22,10 @@ func _ready() -> void:
 	audio.name = "AudioManager"
 	add_child(audio)
 
-	var args := OS.get_cmdline_user_args()
+	var raw_args := OS.get_cmdline_user_args()
+	var args: Array = []
+	for a in raw_args:
+		args.append(String(a).trim_prefix("--"))
 	if args.has("smoke"):
 		smoke_test = true
 		start_game(true)
@@ -58,6 +61,7 @@ func start_game(new_game: bool) -> void:
 	world = WorldBuilder.new()
 	world.name = "World"
 	add_child(world)
+	await get_tree().process_frame
 	await world.build_all(_loading_progress)
 
 	# --- player + camera ---
@@ -141,7 +145,6 @@ func toggle_vehicle() -> void:
 		GameInput.reset_all()
 		GameInput.driving_mode = false
 		hud.set_vehicle(null)
-		_ = v
 	elif player != null:
 		var v2 := player.find_nearest_vehicle(4.0)
 		if v2 != null:

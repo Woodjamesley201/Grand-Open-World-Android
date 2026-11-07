@@ -175,7 +175,7 @@ func _build_download_screen() -> void:
 		_download_root.visible = false
 		_menu_root.visible = true
 		_refresh())
-	_download_root.add_child(back)
+
 
 func _open_download() -> void:
 	_menu_root.visible = false
@@ -311,7 +311,7 @@ func _build_settings_screen() -> void:
 	back.pressed.connect(func():
 		_settings_root.visible = false
 		_menu_root.visible = true)
-	_settings_root.add_child(back)
+
 
 func _open_settings() -> void:
 	_menu_root.visible = false
@@ -349,7 +349,7 @@ func _build_credits_screen() -> void:
 	back.pressed.connect(func():
 		_credits_root.visible = false
 		_menu_root.visible = true)
-	_credits_root.add_child(back)
+
 
 func _open_credits() -> void:
 	_menu_root.visible = false

@@ -43,6 +43,7 @@ func setup(d: Dictionary, color: Color, world_builder: WorldBuilder) -> void:
 	is_police = bool(d.get("police", false))
 	_rng.seed = randi()
 	mass = float(d["mass"])
+	center_of_mass_mode = RigidBody3D.CENTER_OF_MASS_MODE_CUSTOM
 	center_of_mass = Vector3(0, -0.35, 0)
 	collision_layer = 4
 	collision_mask = 15
@@ -187,8 +188,15 @@ func _build_lights() -> void:
 	bl.position = Vector3(0, def["ride"] + 0.5, l / 2.0 + 0.03)
 	add_child(bl)
 
-func _build_audio() -> void:
+func _ready() -> void:
+	# audio is wired once the vehicle is inside the tree
 	_audio = get_node_or_null("/root/Main/AudioManager")
+	_wire_audio()
+
+func _build_audio() -> void:
+	return
+
+func _wire_audio() -> void:
 	if _audio == null:
 		return
 	engine_player = AudioStreamPlayer3D.new()
@@ -220,14 +228,8 @@ func _build_smoke() -> void:
 	_smoke.scale_amount_max = 1.6
 	_smoke.emission_shape = CPUParticles3D.EMISSION_SHAPE_SPHERE
 	_smoke.emission_sphere_radius = 0.4
-	var q := QuadMesh.new()
-	q.size = Vector2(0.5, 0.5)
-	var sm := StandardMaterial3D.new()
-	sm.albedo_color = Color(0.2, 0.2, 0.2, 0.5)
-	sm.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
-	sm.billboard_mode = BaseMaterial3D.BILLBOARD_PARTICLES
-	q.material = sm
-	_smoke.particle = q
+	_smoke.scale_amount_min = 0.4
+	_smoke.scale_amount_max = 0.8
 	_smoke.position = Vector3(0, 1.2, -def["length"] * 0.2)
 	add_child(_smoke)
 
@@ -269,7 +271,7 @@ func _player_control() -> void:
 func current_speed() -> float:
 	return linear_velocity.length()
 
-func _update_fx(_delta: float) -> void:
+func _update_fx(delta: float) -> void:
 	# engine sound pitch from wheel speed
 	var rpm := clampf(current_speed() / float(def["max_speed"]), 0.05, 1.0)
 	if engine_player != null:
@@ -306,12 +308,12 @@ func start_ai(node_grid: Vector2i, dir: int) -> void:
 	_set_next_target()
 
 func _set_next_target() -> void:
-	var nxt := ai_node + DIRS[ai_dir]
+	var nxt: Vector2i = ai_node + DIRS[ai_dir]
 	if nxt.x < 0 or nxt.x > 12 or nxt.y < 0 or nxt.y > 12:
 		# pick a valid direction at the edge
 		var options: Array = []
 		for d in range(4):
-			var cand := ai_node + DIRS[d]
+			var cand: Vector2i = ai_node + DIRS[d]
 			if cand.x >= 0 and cand.x <= 12 and cand.y >= 0 and cand.y <= 12 and d != _opposite(ai_dir):
 				options.append(d)
 		if options.is_empty():
@@ -326,7 +328,7 @@ func _set_next_target() -> void:
 			for d in range(4):
 				if d == ai_dir or d == _opposite(ai_dir):
 					continue
-				var cand := ai_node + DIRS[d]
+				var cand: Vector2i = ai_node + DIRS[d]
 				if cand.x >= 0 and cand.x <= 12 and cand.y >= 0 and cand.y <= 12:
 					options2.append(d)
 			if not options2.is_empty():

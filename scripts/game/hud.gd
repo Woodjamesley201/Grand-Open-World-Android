@@ -44,7 +44,6 @@ func _build_minimap(root: Control) -> void:
 	minimap_vp = SubViewport.new()
 	minimap_vp.size = Vector2i(int(MAP_SIZE), int(MAP_SIZE))
 	minimap_vp.render_target_update_mode = SubViewport.UPDATE_ALWAYS
-	minimap_vp.position = Vector2i(14, 14)
 	root.add_child(minimap_vp)
 	minimap_cam = Camera3D.new()
 	minimap_cam.projection = Camera3D.PROJECTION_ORTHOGONAL
@@ -120,6 +119,7 @@ func _build_status(root: Control) -> void:
 	fps_label.position = Vector2(16, 240)
 	# pause button
 	var pause_btn := Button.new()
+	pause_btn.name = "HUD_PAUSE_BTN"
 	pause_btn.text = "II"
 	pause_btn.add_theme_font_size_override("font_size", 26)
 	pause_btn.custom_minimum_size = Vector2(64, 56)
