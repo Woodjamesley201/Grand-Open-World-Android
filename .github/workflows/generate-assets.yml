@@ -1,0 +1,44 @@
+name: Generate HD Asset Packs
+
+on:
+  workflow_dispatch:
+  push:
+    tags: ["assets-v*"]
+
+jobs:
+  generate:
+    name: Build and publish ~1 GB HD asset pack
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pillow numpy
+
+      - name: Generate asset packs
+        run: python3 tools/generate_asset_packs.py --out build_packs --target-bytes 1073741824
+
+      - name: Show pack sizes
+        run: |
+          ls -lh build_packs/
+          du -sh build_packs/
+
+      - name: Create/Update release with packs
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: assets-v1
+          name: "HD Asset Pack v1"
+          body: |
+            High-resolution texture pack and high-quality music pack for
+            Grand Open World (~1 GB total). The game downloads these
+            automatically on first launch from the main menu.
+          files: build_packs/*
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

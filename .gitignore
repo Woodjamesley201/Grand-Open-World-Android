@@ -1,0 +1,16 @@
+# Godot generated files
+.godot/
+*.translation
+android/
+
+# Build outputs
+build/
+*.apk.idsig
+downloads/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# CI debug keystore is generated in the workflow, never committed
+debug.keystore
