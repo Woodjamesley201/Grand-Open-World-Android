@@ -82,6 +82,10 @@ jobs:
             -keypass android -storepass android -keystore "$PWD/debug.keystore" \
             -dname "CN=Android Debug,O=Android,C=US"
           sed -i "s|keystore/debug=\"debug.keystore\"|keystore/debug=\"$PWD/debug.keystore\"|" export_presets.cfg
+          sed -i "s|keystore/release=\"\"|keystore/release=\"$PWD/debug.keystore\"|" export_presets.cfg
+          sed -i "s|keystore/release_user=\"\"|keystore/release_user=\"androiddebugkey\"|" export_presets.cfg
+          sed -i "s|keystore/release_password=\"\"|keystore/release_password=\"android\"|" export_presets.cfg
+          grep keystore export_presets.cfg
 
       - name: Import project
         run: godot --headless --path . --import || true
