@@ -11,8 +11,9 @@ ARM64 support, and a fully automated GitHub Actions APK pipeline.
 
 ## Quick install
 
-1. Download **GrandOpenWorld.apk** from the [releases](../../releases) (or from the latest
-   [Actions build artifact](../../actions)).
+1. Download **GrandOpenWorld.apk** from the
+   [v1.0.0 release](https://github.com/Woodjamesley201/Grand-Open-World-Android/releases/download/v1.0.0/GrandOpenWorld.apk)
+   (or grab the build artifact from [Actions](../../actions)).
 2. Copy it to your Android 10+ phone and install it (allow "install from unknown sources").
 3. On first launch the game shows a **main menu** and requires a one-time download of the
    **HD asset pack (~1 GB)** — textures and music are fetched from this repository's
