@@ -44,8 +44,15 @@ jobs:
       # GitHub ubuntu runners ship a preinstalled Android SDK (ANDROID_HOME set)
       - name: Install Android platform + build tools
         run: |
-          yes | sdkmanager --licenses > /dev/null || true
-          sdkmanager --install "platforms;android-34" "build-tools;34.0.0" > /dev/null
+          export ANDROID_HOME="${ANDROID_HOME:-/usr/local/lib/android/sdk}"
+          SM="$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager"
+          if [ ! -x "$SM" ]; then
+            SM="$(find "$ANDROID_HOME/cmdline-tools" -name sdkmanager -type f | head -1)"
+          fi
+          echo "Using sdkmanager: $SM"
+          yes | "$SM" --licenses > /dev/null || true
+          "$SM" --install "platforms;android-34" "build-tools;34.0.0" > /dev/null
+          echo "ANDROID_HOME=$ANDROID_HOME" >> "$GITHUB_ENV"
 
       - name: Install Godot headless + export templates
         run: |
